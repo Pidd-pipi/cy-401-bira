@@ -9,6 +9,7 @@ import {
 } from 'typeorm';
 import { ContractStatus } from '../../../common/enums/contract-status.enum';
 import { PaymentMode } from '../../../common/enums/payment-mode.enum';
+import { StageStatus } from '../../../common/enums/stage-status.enum';
 import { Requirement } from '../../requirement/entity/requirement.entity';
 import { User } from '../../user/entity/user.entity';
 
@@ -16,7 +17,14 @@ export interface ContractStage {
   title: string;
   amount: number;
   dueDate: string;
+  status: StageStatus;
   completed: boolean;
+  // 自由职业者提交的本阶段交付说明
+  submissionNote?: string | null;
+  submittedAt?: string | null;
+  // 需求方退回时填写的原因
+  rejectReason?: string | null;
+  reviewedAt?: string | null;
 }
 
 @Entity('contracts')

@@ -3,6 +3,7 @@ import {
   ContractStatus,
   PaymentMode,
   RequirementStatus,
+  StageStatus,
   UserRole
 } from './enums';
 
@@ -53,7 +54,14 @@ export interface ContractStage {
   title: string;
   amount: number;
   dueDate: string;
+  status: StageStatus;
   completed: boolean;
+  /** 自由职业者提交的本阶段交付说明 */
+  submissionNote?: string | null;
+  submittedAt?: string | null;
+  /** 需求方退回时填写的原因 */
+  rejectReason?: string | null;
+  reviewedAt?: string | null;
 }
 
 export interface Contract {

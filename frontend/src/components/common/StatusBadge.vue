@@ -24,6 +24,7 @@ const labels: Record<string, string> = {
   [BidStatus.Withdrawn]: '已撤回',
   [ContractStatus.PendingSign]: '待签署',
   [ContractStatus.Active]: '执行中',
+  // PendingReview / Completed 与需求状态共用同一枚举值，不再重复声明
   [ContractStatus.Terminated]: '已终止'
 };
 
@@ -44,7 +45,14 @@ const tagType = computed(() => {
   ) {
     return 'danger';
   }
-  if ([RequirementStatus.InProgress, ContractStatus.Active].includes(normalizedStatus.value as never)) {
+  if (
+    [
+      RequirementStatus.InProgress,
+      ContractStatus.Active,
+      RequirementStatus.PendingReview,
+      ContractStatus.PendingReview
+    ].includes(normalizedStatus.value as never)
+  ) {
     return 'warning';
   }
   return 'info';

@@ -27,12 +27,32 @@ export const useContractStore = defineStore('contract', () => {
     return contract;
   }
 
-  async function signContract(id: string) {
-    currentContract.value = await contractApi.sign(id);
+  /** 详情操作后同步工作台列表，保证进度为最新 */
+  function syncToMyContracts(contract: Contract) {
+    const index = myContracts.value.findIndex(item => item.id === contract.id);
+    if (index >= 0) {
+      myContracts.value[index] = contract;
+    }
   }
 
-  async function completeContract(id: string) {
-    currentContract.value = await contractApi.complete(id);
+  async function signContract(id: string) {
+    currentContract.value = await contractApi.sign(id);
+    syncToMyContracts(currentContract.value);
+    return currentContract.value;
+  }
+
+  /** 自由职业者提交本阶段交付说明（退回后可重新提交） */
+  async function submitStage(id: string, stageIndex: number, submissionNote: string) {
+    currentContract.value = await contractApi.submitStage(id, stageIndex, submissionNote);
+    syncToMyContracts(currentContract.value);
+    return currentContract.value;
+  }
+
+  /** 需求方逐段验收：通过 / 退回并写明原因 */
+  async function reviewStage(id: string, stageIndex: number, approved: boolean, rejectReason?: string) {
+    currentContract.value = await contractApi.reviewStage(id, stageIndex, approved, rejectReason);
+    syncToMyContracts(currentContract.value);
+    return currentContract.value;
   }
 
   return {
@@ -44,6 +64,7 @@ export const useContractStore = defineStore('contract', () => {
     fetchDetail,
     createContract,
     signContract,
-    completeContract
+    submitStage,
+    reviewStage
   };
 });

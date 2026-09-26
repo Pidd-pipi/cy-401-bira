@@ -26,7 +26,15 @@ export const contractApi = {
   sign(id: string) {
     return http.patch<unknown, Contract>(`/contracts/${id}/sign`);
   },
-  complete(id: string) {
-    return http.patch<unknown, Contract>(`/contracts/${id}/complete`);
+  submitStage(id: string, stageIndex: number, submissionNote: string) {
+    return http.patch<unknown, Contract>(`/contracts/${id}/stages/${stageIndex}/submit`, {
+      submissionNote
+    });
+  },
+  reviewStage(id: string, stageIndex: number, approved: boolean, rejectReason?: string) {
+    return http.patch<unknown, Contract>(`/contracts/${id}/stages/${stageIndex}/review`, {
+      approved,
+      rejectReason
+    });
   }
 };
