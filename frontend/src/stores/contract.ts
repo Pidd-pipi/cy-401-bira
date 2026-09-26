@@ -28,11 +28,40 @@ export const useContractStore = defineStore('contract', () => {
   }
 
   async function signContract(id: string) {
-    currentContract.value = await contractApi.sign(id);
+    const contract = await contractApi.sign(id);
+    currentContract.value = contract;
+    upsertMine(contract);
+    return contract;
   }
 
-  async function completeContract(id: string) {
-    currentContract.value = await contractApi.complete(id);
+  async function submitStage(id: string, stageIndex: number, note: string) {
+    const contract = await contractApi.submitStage(id, stageIndex, note);
+    currentContract.value = contract;
+    upsertMine(contract);
+    return contract;
+  }
+
+  async function approveStage(id: string, stageIndex: number) {
+    const contract = await contractApi.approveStage(id, stageIndex);
+    currentContract.value = contract;
+    upsertMine(contract);
+    return contract;
+  }
+
+  async function rejectStage(id: string, stageIndex: number, reason: string) {
+    const contract = await contractApi.rejectStage(id, stageIndex, reason);
+    currentContract.value = contract;
+    upsertMine(contract);
+    return contract;
+  }
+
+  function upsertMine(contract: Contract) {
+    const index = myContracts.value.findIndex(item => item.id === contract.id);
+    if (index === -1) {
+      myContracts.value.unshift(contract);
+    } else {
+      myContracts.value[index] = contract;
+    }
   }
 
   return {
@@ -44,6 +73,8 @@ export const useContractStore = defineStore('contract', () => {
     fetchDetail,
     createContract,
     signContract,
-    completeContract
+    submitStage,
+    approveStage,
+    rejectStage
   };
 });

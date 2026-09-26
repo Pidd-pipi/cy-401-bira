@@ -3,6 +3,7 @@ import {
   ContractStatus,
   PaymentMode,
   RequirementStatus,
+  StageStatus,
   UserRole
 } from './enums';
 
@@ -49,11 +50,28 @@ export interface Bid {
   createdAt?: string;
 }
 
+export type StageHistoryAction = 'submit' | 'approve' | 'reject';
+
+export interface StageHistoryEntry {
+  action: StageHistoryAction;
+  note?: string;
+  reason?: string;
+  operatorId: string;
+  operatorName: string;
+  at: string;
+}
+
 export interface ContractStage {
   title: string;
   amount: number;
   dueDate: string;
   completed: boolean;
+  status: StageStatus;
+  note?: string;
+  submittedAt?: string;
+  reviewedAt?: string;
+  rejectReason?: string;
+  history?: StageHistoryEntry[];
 }
 
 export interface Contract {

@@ -23,6 +23,7 @@ docker compose up -d
 - 需求详情：查看需求、报价列表，登录后提交报价。
 - 我的工作台：按角色查看发布需求、我的报价和进行中合同。
 - 合同详情：查看合同编号、双方信息、付款方式和阶段进度。
+- 逐段验收：自由职业者按阶段提交完成说明，需求方逐段确认通过或退回并写明原因；退回后可补交重新提交，前一阶段未通过则后续阶段锁定；全部阶段通过后合同与关联需求才完成，仅合同双方可操作。
 - 个人资料：查看并编辑用户资料、技能标签和历史项目。
 - JWT 认证授权：登录后前端请求拦截器自动携带 token，后端 guard/middleware 校验。
 - 操作日志：后端请求日志中间件写入 `operation_logs` 表。
@@ -144,6 +145,16 @@ npm run dev
 - 后端使用：`backend/src/modules/bid/bid.service.ts`
 - 前端定义：`frontend/src/types/enums.ts`
 - 前端使用：`frontend/src/components/common/StatusBadge.vue`
+
+`StageStatus`（合同逐段验收：`pending` 待提交 → `submitted` 待验收 → `approved` 已通过；退回后回到 `pending` 可补交重提）：
+
+- 后端定义：`backend/src/common/enums/stage-status.enum.ts`
+- 后端使用：`backend/src/modules/contract/entity/contract.entity.ts`
+- 后端使用：`backend/src/modules/contract/contract.service.ts`
+- 前端定义：`frontend/src/types/enums.ts`
+- 前端使用：`frontend/src/components/common/ProgressSteps.vue`
+- 前端使用：`frontend/src/components/common/StageAcceptance.vue`
+- 前端使用：`frontend/src/components/common/ContractCard.vue`
 
 ## 核心实体链路
 

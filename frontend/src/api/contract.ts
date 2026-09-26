@@ -2,12 +2,18 @@ import { http } from './http';
 import type { Contract, ContractStage } from '@/types';
 import type { PaymentMode } from '@/types/enums';
 
+export interface ContractStageInput {
+  title: string;
+  amount: number;
+  dueDate: string;
+}
+
 export interface ContractPayload {
   requirementId: string;
   freelancerId: string;
   totalAmount: number;
   paymentMode: PaymentMode;
-  stages: Omit<ContractStage, 'completed'>[];
+  stages: ContractStageInput[];
 }
 
 export const contractApi = {
@@ -26,7 +32,13 @@ export const contractApi = {
   sign(id: string) {
     return http.patch<unknown, Contract>(`/contracts/${id}/sign`);
   },
-  complete(id: string) {
-    return http.patch<unknown, Contract>(`/contracts/${id}/complete`);
+  submitStage(id: string, stageIndex: number, note: string) {
+    return http.patch<unknown, Contract>(`/contracts/${id}/stages/${stageIndex}/submit`, { note });
+  },
+  approveStage(id: string, stageIndex: number) {
+    return http.patch<unknown, Contract>(`/contracts/${id}/stages/${stageIndex}/approve`);
+  },
+  rejectStage(id: string, stageIndex: number, reason: string) {
+    return http.patch<unknown, Contract>(`/contracts/${id}/stages/${stageIndex}/reject`, { reason });
   }
 };

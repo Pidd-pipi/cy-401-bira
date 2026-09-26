@@ -47,6 +47,9 @@ const tagType = computed(() => {
   if ([RequirementStatus.InProgress, ContractStatus.Active].includes(normalizedStatus.value as never)) {
     return 'warning';
   }
+  if ([ContractStatus.PendingReview].includes(normalizedStatus.value as never)) {
+    return 'warning';
+  }
   return 'info';
 });
 </script>

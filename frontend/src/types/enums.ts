@@ -23,6 +23,12 @@ export enum ContractStatus {
   Terminated = 'terminated'
 }
 
+export enum StageStatus {
+  Pending = 'pending',
+  Submitted = 'submitted',
+  Approved = 'approved'
+}
+
 export enum UserRole {
   Client = 'client',
   Freelancer = 'freelancer',

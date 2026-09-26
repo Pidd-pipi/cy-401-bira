@@ -9,14 +9,31 @@ import {
 } from 'typeorm';
 import { ContractStatus } from '../../../common/enums/contract-status.enum';
 import { PaymentMode } from '../../../common/enums/payment-mode.enum';
+import { StageStatus } from '../../../common/enums/stage-status.enum';
 import { Requirement } from '../../requirement/entity/requirement.entity';
 import { User } from '../../user/entity/user.entity';
+
+export type StageHistoryAction = 'submit' | 'approve' | 'reject';
+
+export interface StageHistoryEntry {
+  action: StageHistoryAction;
+  note?: string;
+  operatorId: string;
+  operatorName: string;
+  at: string;
+}
 
 export interface ContractStage {
   title: string;
   amount: number;
   dueDate: string;
   completed: boolean;
+  status: StageStatus;
+  note?: string;
+  submittedAt?: string;
+  reviewedAt?: string;
+  rejectReason?: string;
+  history?: StageHistoryEntry[];
 }
 
 @Entity('contracts')
